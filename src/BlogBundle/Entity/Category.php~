@@ -1,0 +1,51 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jims
+ * Date: 16-6-26
+ * Time: 上午9:18
+ */
+
+namespace BlogBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="category")
+ */
+class Category
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $name;
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private $status;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $createdAt;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $updatedAt;
+
+	/**
+	 * @ORM\ManyToMany(targetEntity="BlogBundle\Entity\Post", inversedBy="categories")
+	 * @ORM\JoinTable("categories_posts")
+	 */
+	private $posts;
+	
+
+}

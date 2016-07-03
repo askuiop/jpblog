@@ -1,0 +1,20 @@
+blog_user:
+    resource: "@BlogBundle/Resources/config/routing/user.yml"
+    prefix:   /user
+
+
+blog_post:
+    resource: "@BlogBundle/Resources/config/routing/post.yml"
+    prefix:   /post
+
+blog_homepage:
+    path:     /
+    defaults: { _controller: BlogBundle:Default:index }
+
+new_try:
+    path:     /newtry
+    defaults: { _controller: BlogBundle:Default:test }
+
+try_data:
+    path:    /data
+    defaults: { _controller: BlogBundle:Default:data }

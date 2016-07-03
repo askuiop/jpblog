@@ -1,0 +1,132 @@
+{% extends '@Blog/layout.html.twig' %}
+
+{% block header %}
+    <h1>hello!</h1>
+{% endblock %}
+
+
+{% block container %}
+    <div id="test">
+        <my-component v-ref:tst :f-msg.sync="message"  >
+            <h2 slot="slot_title">this is a slot!</h2>
+        </my-component>
+        <input v-model="message">
+    </div>
+
+    <style>
+        .live_box dl{
+            border: 1px solid #000;
+            padding: 8px;;
+        }
+        .live_box dl .live_box_comment{
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+    </style>
+
+
+
+
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script src="{{ asset("dist/js/c-888d4551b8.js") }}"></script>
+    <script src="{{ asset("bundles/blog/js/vue.js") }}"></script>
+    <script>
+        Vue.config.delimiters = ['${', '}'];
+
+        //var childM = Vue.extend({
+        //    template: "<p>I am a child!</p>"
+        //})
+
+        //Vue.component('child-m', {
+        //    template: "<hr>123",
+        //    props: ['msg'],
+        //    data: function () {
+        //        return {};
+        //    }
+        //})
+
+        var MyComponent = Vue.extend({
+            template: '<slot name="slot_title"></slot>' +
+                    '<div>${fMsg} ' +
+                    '<input value="${fMsg}" v-on:input="typed"/>' +
+                    ' custom component!' +
+                    '<child-m :c-msg="fMsg" v-on:talling="fatherHeard" ></child-m ></div>' +
+                    '<component :is="anotherModule" keep-alive ></component>',
+            props: {
+                fMsg:{type: String, required: true}
+            },
+            data: function () {
+                return {
+                    fData: "this is father's data" ,
+                    anotherModule: "another-m"
+                }
+            },
+            //events: {
+            //    'talling': function (msg) {
+            //        this.fMsg = msg;
+            //    }
+            //},
+            components: {
+                'child-m': {
+                    template:"<h3>child says:${ cMsg }<button v-on:click='msgOut'>tell father</button></h3>",
+                    props: {
+                        cMsg:{type: String}
+                    },
+                    methods:{
+                        msgOut:function () {
+                            this.$dispatch('talling', this.words)
+                            this.words = '';
+                        }
+                    },
+                    data: function () {
+                        return { words: "I am child , I have something to tell you" }
+                    }
+                },
+                'another-m':{
+                    template: "<i>I do nothing</i>"
+                }
+            },
+            methods:{
+                typed: function (e) {
+                    console.log(this);
+                    console.log(this.fMsg);
+                    console.log(e.target);
+                    this.fMsg = e.target.value;
+                },
+                fatherHeard : function (msg) {
+                     this.fMsg = msg;
+                 }
+            }
+        })
+
+        // 注册
+        Vue.component('my-component', MyComponent)
+
+
+
+
+        var data = {
+            message: 'good!',
+            show: true
+        }
+
+        var vm = new Vue({
+            el: '#test',
+            data: data
+        })
+
+        console.log(vm.$refs.tst);
+
+        vm.$watch('message', function (newVal, oldVal) {
+            console.log('change!');
+        })
+
+
+    </script>
+
+{% endblock %}

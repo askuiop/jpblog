@@ -1,0 +1,16 @@
+services:
+    form.type.ueditor:
+        class: Jims\AddonBundle\Form\UeditorType
+        tags:
+            - { name: form.type, alias: ueditor  }
+
+    form.type.umeditor:
+        class: Jims\AddonBundle\Form\UmeditorType
+        tags:
+            - { name: form.type, alias: umeditor  }
+
+    ueditor.uploader:
+        class: Jims\AddonBundle\Service\UeditorUploader
+
+    umeditor.uploader:
+        class: Jims\AddonBundle\Service\UmeditorUploader

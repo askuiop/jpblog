@@ -1,0 +1,271 @@
+{% extends '@Blog/layout.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/blog/css/animate.css') }}">
+{% endblock %}
+
+
+{% block header %}
+    <h1>New try!</h1>
+{% endblock %}
+
+
+{% block container %}
+    <style>
+        .live_box dl{
+            border: 1px solid #000;
+            padding: 8px;;
+        }
+        .live_box dl .live_box_comment{
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        /* 必需 */
+        .expand-transition {
+            transition: opacity .5s ease;
+            padding: 10px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+
+        .tips{
+            position: fixed;
+            right: 0px;
+            bottom: 10%;
+            margin: 0 auto;
+            color: white;
+
+        }
+        .tips p{
+            background: #229c22;
+            padding: 10px 6px 10px 20px;
+            border-radius: 20px 0 0 20px;
+        }
+
+    </style>
+
+<script type="text/html" id="live-box-comment">
+    <div class="live_box_comment" >
+        <div class="cf cor_2 mt10">
+            <span class="fr">${currentData.time}</span>
+            <p><span>${currentData.auth}</span></p>
+        </div>
+        <p class="mt20 pb10"><span class="cor_1 lh40">${currentData.content}</span></p>
+        <live-box-comment :data=nextData  v-if=showDeep  ></live-box-comment>
+    </div>
+</script>
+
+    <div id="test" >
+        <live-app v-ref:liveapp  >
+            <p>loading...</p>
+        </live-app>
+    </div>
+
+    <div class="tips" id="tips">
+        <tips-app v-ref:livetips >
+        </tips-app>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <script src="{{ asset("dist/js/c-888d4551b8.js") }}"></script>
+    <script src="{{ asset("bundles/blog/js/vue.js") }}"></script>
+    <script src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
+
+
+    <script>
+        Vue.config.delimiters = ['${', '}'];
+
+        Vue.transition('bounce', {
+            enterClass: 'slideInDown',
+            leaveClass: 'bounceOutRight'
+        })
+        Vue.transition('slide', {
+            enterClass: 'shake',
+            leaveClass: 'slideOutRight'
+        })
+
+        var tipsApp = Vue.extend({
+            name: 'tips',
+            template: '<p @click="goToNew" v-if="showAction"    class="animated" transition="slide"   >有${count}条最新动态，快去查看！</p>',
+            data: function () {
+                return {
+                    show: false,
+                    count: 0,
+                    isRead: 0,
+                }
+            },
+            events:{
+                gotNew: function (msg) {
+                    console.log(msg);
+                    this.count = msg.count?msg.count:0;
+                    this.show = true;
+                    this.isRead = false;
+                }
+            },
+            methods:{
+                goToNew:function () {
+                    this.show = false;
+                    this.isRead = true;
+                    $.scrollTo('#test',400);
+                },
+            },
+            computed: {
+                showAction:function () {
+                    if (!this.show || this.isRead || !this.count ) return false;
+
+                    var target = document.getElementById('test');
+                    if (target.getBoundingClientRect().top > 0 && target.getBoundingClientRect().top<window.innerHeight) {
+                        vm2.$refs.livetips.show = false;
+                        vm2.$refs.livetips.isRead = true;
+                    }
+                    return this.show && !this.isRead && this.count;
+                }
+            }
+        })
+        Vue.component('tips-app', tipsApp)
+
+        var liveBoxComment= Vue.extend({
+            template: document.getElementById("live-box-comment").innerHTML,
+            props: ['data'],
+            computed: {
+                showDeep:function () {
+                    return !!this.data[1];
+                },
+                currentData:function () {
+                    return this.data[0];
+                },
+                nextData: function () {
+                    return [ this.data[1] ];
+                }
+            }
+
+        })
+        Vue.component('live-box-comment', liveBoxComment)
+
+
+        var liveApp = Vue.extend({
+            name: "liveApp",
+            template: '<div class="live_box" id="livelist" >' +
+                '<dl v-for="item in reverseData" :class="item.type==\'cm-normal\'?\'\':\'live_box_dl\'" class="animated" transition="bounce" >' +
+                '<cm-normal :data="item" v-if="item.type==\'cm-normal\'"   ></cm-normal>' +
+                '<cm-comment :data="item" v-if="item.type==\'cm-comment\'" ></cm-comment>' +
+                '</dl>' +
+            '</div><button @click="xchange">shuffle</button>',
+            data: function () {
+                return {
+                    liveData:[
+                                {type:'cm-normal', content:"1好了，今天我们的直播就到这里了，", time:'3 天前', 'date':'07-01' },
+                                {type:'cm-normal', content:"2让我们一起相约6月25日高招咨询会直播吧！", time:'4 天前', 'date':'07-01'  },
+                                {type:'cm-comment', content:"3一定要三思而后行哦！！", time:'4 天前', 'date':'07-01' ,
+                                    comment:[
+                                        { auth:"xxx", content:'一定要三思而后行哦！', time:'10:10', date:'6-01'}
+                                    ],
+                                },
+                                {type:'cm-comment', content:"4让我们一起相约6月25日高招咨询会直播吧！", time:'4 天前', 'date':'07-01' ,
+                                    comment:[
+                                        { auth:"xxx", content:'的国家科技', time:'10:10', date:'6-01'},
+                                        { auth:"pete", content: "科技", time:'10:10', date:'6-01'},
+                                    ],
+                                },
+                            ],
+                    tmpData:[],
+                    show: true,
+
+                }
+            },
+            props: [],
+            computed: {
+                'reverseData': function () {
+                    this.tmpDate = this.liveData.slice(0);
+
+                    this.tmpDate.reverse()
+                    return this.tmpDate;
+                }
+            },
+            components: {
+                'cm-normal':{
+                    template:'<dt><i class="ico_ring"></i><i class="ico_arrow_left_2"></i><span class="fz20">${data.time}</span><span class="ml25 fz14">${data.date}</span></dt>' +
+                        '<dd><p><span class="lh26 fz16 cor_5">${data.content}</span></p></dd>',
+                    props:['data']
+                },
+
+                'cm-comment':{
+                    template: '<dt><i class="ico_ring"></i><i class="ico_arrow_left_2"></i><span class="fz20">${data.time}</span><span class="ml25 fz14">${data.date}</span><i class="ico_sb"></i></dt>' +
+                    '<dd><p><span class="lh26 fz16 cor_5">${data.content}</span></p>' +
+                    '<live-box-comment  :data="data.comment" ></live-box-comment>' +
+                    '</dd>',
+                    props:['data']
+                }
+
+            },
+            methods:{
+                xchange:function () {
+                     this.show=!this.show;
+                }
+            }
+
+        })
+
+
+
+        // 注册
+        Vue.component('live-app', liveApp)
+
+
+        var vm = new Vue({
+            el: "#test"
+        })
+
+        var vm2 = new Vue({
+            el: "#tips"
+        })
+
+
+        function get() {
+            $.ajax({
+                url: "/app_dev.php/data",
+                type: "get",
+                data: {},
+                dataType: "json",
+                cache: false,
+                async: true,
+                success: function (data) {
+                    $(data).each(function (index,val) {
+                        vm.$refs.liveapp.liveData.push(val);
+                    })
+                    vm2.$broadcast('gotNew', {count:data.length})
+
+                },
+                error: function () {
+
+                },
+                beforeSend: function () {
+
+                },
+                complete: function () {
+
+                }
+            });
+        }
+        $(function () {
+            window.onscroll = function () {
+                if( vm2.$refs.livetips.isRead )return ;
+                var target = document.getElementById('test');
+                if (target.getBoundingClientRect().top > 0 && target.getBoundingClientRect().top<window.innerHeight) {
+                    vm2.$refs.livetips.show = false;
+                    vm2.$refs.livetips.isRead = true;
+                } else {
+                    vm2.$refs.livetips.show = true;
+                }
+            }
+        });
+
+    </script>
+
+{% endblock %}
+
+
