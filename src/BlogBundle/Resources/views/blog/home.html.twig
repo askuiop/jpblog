@@ -1,0 +1,29 @@
+{% extends '@Blog/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/dist/css/home.css') | asset_version }}">
+{% endblock %}
+
+
+{% block container %}
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Post</h2>
+
+            {% if blog_list %}
+                <ul>
+                    {% for blog in blog_list if blog %}
+                        <li><a href="{{ path('blog_post_detail', { 'id': blog.id }) }}">{{ blog.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <h2>People says</h2>
+        </div>
+
+    </div>
+
+{% endblock %}
+

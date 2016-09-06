@@ -1,0 +1,18 @@
+services:
+    form.type.ueditor:
+        class: Jims\EditorHubBundle\Form\UeditorType
+        arguments: ["@kernel"]
+        tags:
+            - { name: form.type, alias: ueditor  }
+
+    form.type.umeditor:
+        class: Jims\EditorHubBundle\Form\UmeditorType
+        arguments: ["@kernel"]
+        tags:
+            - { name: form.type, alias: umeditor  }
+
+    ueditor.uploader:
+        class: Jims\EditorHubBundle\Service\UeditorUploader
+
+    umeditor.uploader:
+        class: Jims\EditorHubBundle\Service\UmeditorUploader

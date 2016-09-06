@@ -11,12 +11,15 @@ namespace BlogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"account"}, message="Unique!")
  */
 class User implements UserInterface
 {
@@ -26,8 +29,10 @@ class User implements UserInterface
 	 * @ORM\Column(type="integer")
 	 */
 	private $id;
+
 	/**
 	 * @ORM\Column(type="string")
+	 * @Assert\NotBlank()
 	 */
 	private $account;
 	/**
@@ -59,6 +64,9 @@ class User implements UserInterface
 	private $posts;
 
 
+	/**
+	 * @Assert\NotBlank(groups={"Registration"})
+	 */
 	private $plainPassword;
 
 	/**
@@ -124,6 +132,9 @@ class User implements UserInterface
 	 */
 	public function getNickname()
 	{
+		if ($this->nickname==null) {
+		    return $this->getUsername();
+		}
 		return $this->nickname;
 	}
 
@@ -273,11 +284,12 @@ class User implements UserInterface
 	public function setPlainPassword($plainPassword)
 	{
 		$this->plainPassword = $plainPassword;
+		$this->password = null;
 	}
 
 	public function getRoles()
 	{
-		// TODO: Implement getRoles() method.
+		return ["ROLE_USER"];
 	}
 
 	public function getSalt()
@@ -287,12 +299,12 @@ class User implements UserInterface
 
 	public function getUsername()
 	{
-		// TODO: Implement getUsername() method.
+		return $this->account;
 	}
 
 	public function eraseCredentials()
 	{
-		// TODO: Implement eraseCredentials() method.
+		$this->plainPassword = null;
 	}
 
 

@@ -3,13 +3,48 @@ blog_user:
     prefix:   /user
 
 
-blog_post:
+admin_post_area:
     resource: "@BlogBundle/Resources/config/routing/post.yml"
-    prefix:   /post
+    prefix:   /admin/post
+
+
+homepage:
+    path:     /default
+    defaults: { _controller: BlogBundle:Default:index }
+
+blog_security_login:
+    path:     /login
+    defaults: { _controller: BlogBundle:Security:login }
+
+blog_security_logout:
+    path:     /logout
+    defaults: { _controller: BlogBundle:Security:logout }
+
+blog_security_register:
+    path:     /regist
+    defaults: { _controller: BlogBundle:Security:regist }
 
 blog_homepage:
     path:     /
-    defaults: { _controller: BlogBundle:Default:index }
+    defaults: { _controller: BlogBundle:Default:home }
+
+blog_post_list:
+    path:     /post
+    defaults: { _controller: BlogBundle:Default:postList }
+
+
+blog_post_detail:
+    path:     /post/{id}
+    defaults: { _controller: BlogBundle:Default:postDetail }
+    requirements: { id: \d+ }
+
+blog_contact:
+    path:     /contact
+    defaults: { _controller: BlogBundle:Default:contact }
+
+
+
+
 
 new_try:
     path:     /newtry

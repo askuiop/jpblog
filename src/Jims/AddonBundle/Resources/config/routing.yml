@@ -1,9 +1,0 @@
-jims_addon_homepage:
-    path:     /ueditor/test
-    defaults: { _controller: JimsAddonBundle:Default:index }
-ueditor:
-    path:     /ueditor
-    defaults: { _controller: JimsAddonBundle:Ueditor:index }
-umeditor:
-    path:     /umeditor
-    defaults: { _controller: JimsAddonBundle:Umeditor:imageUp }

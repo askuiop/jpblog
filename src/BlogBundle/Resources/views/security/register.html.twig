@@ -1,0 +1,29 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% form_theme register_form 'bootstrap_3_layout.html.twig' %}
+
+{% block container %}
+
+<div class="center-block" style="width: 40%">
+    <h2>Register</h2>
+
+
+    <div >
+        {{ form_errors(register_form) }}
+
+    {{ form_start(register_form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_row(register_form.account) }}
+
+
+        {{ form_row(register_form.plain_password.first, {
+            'label': "Password"
+        }) }}
+        {{ form_row(register_form.plain_password.second, {
+            'label': "Repeat Password"
+        }) }}
+    <button type="submit" class="btn btn-primary btn-block">regist</button>
+    {{ form_end(register_form) }}
+    </div>
+</div>
+
+{% endblock %}

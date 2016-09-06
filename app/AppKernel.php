@@ -17,7 +17,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new BlogBundle\BlogBundle(),
-            new Jims\AddonBundle\JimsAddonBundle(),
+            new Jims\EditorHubBundle\JimsEditorHubBundle(),
+            new Jims\MsgQueueBundle\JimsMsgQueueBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

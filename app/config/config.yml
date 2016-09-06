@@ -29,6 +29,8 @@ framework:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        cookie_lifetime: 3600
+        gc_maxlifetime: 1800
     fragments:       ~
     http_method_override: true
     assets: ~
@@ -38,8 +40,8 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form_themes:
-        - 'JimsAddonBundle:Form:form_ueditor_type.html.twig'
-        - 'JimsAddonBundle:Form:form_umeditor_type.html.twig'
+        - 'JimsEditorHubBundle:Form:form_ueditor_type.html.twig'
+        - 'JimsEditorHubBundle:Form:form_umeditor_type.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -73,13 +75,10 @@ swiftmailer:
 
 
 
-jims_addon:
+jims_editor_hub:
     ueditor:
         config_file: ~       #ueditor 的 配置文件的 默认：config.json
     umeditor:
         save_path:    "upload/umeditor/"                                  #存储文件夹
         max_size:     2000                                                #允许的文件最大尺寸，单位KB
         allow_files:  [ ".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp" ]     #允许的文件格式
-    form_themes:
-        - 'JimsAddonBundle:Form:form_ueditor_type.html.twig'
-        - 'JimsAddonBundle:Form:form_umeditor_type.html.twig'

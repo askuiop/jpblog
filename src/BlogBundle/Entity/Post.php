@@ -10,11 +10,13 @@ namespace BlogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use	BlogBundle\Doctrine\CreatAndUpdateAction;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PostRepository")
  * @ORM\Table(name="post")
+ * @ORM\HasLifecycleCallbacks()
+ * 
  */
 class Post
 {
@@ -45,6 +47,10 @@ class Post
 	 *
 	 */
 	private $categories;
+	
+	
+	private $readCount;
+
 	
 	
 	/**
@@ -227,4 +233,7 @@ class Post
     {
         return $this->categories;
     }
+
+		use	CreatAndUpdateAction;
+		
 }

@@ -1,16 +1,60 @@
-{% extends 'base.html.twig' %}
+{% extends '@Blog/base.html.twig' %}
 
 {% block body %}
+
     {% block header %}
+        <div class="site-header">
+            <div class="container">
+                <header class="">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <h1>Jims blog</h1>
+                        </div>
+
+
+                        {% block nav %}
+                            <div class="col-xs-12 col-sm-12 col-md-7 menu-list">
+                                <ul class="nav nav-pills">
+                                    <li><a href="{{ path('blog_homepage') }}">Index</a></li>
+                                    <li><a href="{{ path('blog_post_list') }}">Post</a></li>
+                                    <li><a href="{{ path('blog_homepage') }}">About</a></li>
+                                    <li><a href="{{ path('blog_contact') }}">Contact</a></li>
+                                </ul>
+                            </div>
+                        {% endblock %}
+
+                        <div class="col-xs-12 col-sm-12 col-md-2 security-entry">
+                            <ul class="nav nav-pills ">
+                                {% if app.user and is_granted("ROLE_USER") %}
+                                    <li><a class="" href="{{ path('blog_security_logout') }}">logout</a></li>
+                                {% else %}
+                                    <li><a class="" href="{{ path('blog_security_login') }}">Login</a></li>
+                                    <li><a class="" href="{{ path('blog_security_register') }}">Register</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+
+                    </div>
+
+
+
+                </header>
+            </div>
+        </div>
+
+
     {% endblock %}
 
-    {% block nav %}
-    {% endblock %}
 
+
+    <div class="container site-main">
     {% block container %}
     {% endblock %}
+    </div>
 
     {% block footer %}
     {% endblock %}
+
 
 {% endblock %}

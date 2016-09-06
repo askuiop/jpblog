@@ -2,12 +2,12 @@
 
 namespace BlogBundle\Form;
 
-use Jims\AddonBundle\Form\UmeditorType;
+use Jims\EditorHubBundle\Form\UmeditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Jims\AddonBundle\Form\UeditorType;
+use Jims\EditorHubBundle\Form\UeditorType;
 
 class PostType extends AbstractType
 {
@@ -23,9 +23,9 @@ class PostType extends AbstractType
                 "attr" => array(
                     "style" => "height:400px;width:600px;", //editor转换成编辑器编辑空间尺寸
                     "class"=>"jims",
-                    //通过自定义js, 控制editor toolbars
-                    #"script" => "window.UEDITOR_CONFIG.toolbars=[['fullscreen', 'source', 'undo', 'redo', 'bold']]"
                 ),
+                //通过自定义js, 控制editor toolbars
+                'js_script' => "window.UEDITOR_CONFIG.toolbars=[['fullscreen', 'source', 'undo', 'redo', 'bold']]",
             ))
             //->add('content' , UmeditorType::class, array(
             //    "attr" => array(
@@ -34,8 +34,8 @@ class PostType extends AbstractType
             //        "script"=>'console.log("This is a ueditor bundle!")'
             //    ),
             //))
-            ->add('createdAt', DateTimeType::class)
-            ->add('updatedAt', DateTimeType::class)
+            ##->add('createdAt', DateTimeType::class)
+            ##->add('updatedAt', DateTimeType::class)
             #->add('user')
             #->add('categories')
         ;

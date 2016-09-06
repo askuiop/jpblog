@@ -1,0 +1,96 @@
+{% extends '@Blog/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/dist/css/post.css') | asset_version }}">
+{% endblock %}
+
+
+{% block container %}
+    <div class="row">
+        <div class="col-md-9">
+            <h2>Post</h2>
+
+            {% if searchStr %}
+                <p class="bg-info">Search for <span class="text-warning">"{{ searchStr }}"</span>:</p>
+            {% endif %}
+
+
+            {% if blog_list %}
+                <div >
+                    {% for blog in blog_list if blog %}
+                        <div class="post-list">
+                            <p><a href="{{ path('blog_post_detail', { 'id': blog.id }) }}">{{ blog.title }}</a></p>
+                            <p>{{ blog.content | post_shortcut }}</p>
+                            <p><span>{{ blog.user.nickname }}</span> @ <span>{{ blog.createdAt | date("Y-m-d H:i:s")  }}</span></p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <style>
+            /* enable absolute positioning */
+            .inner-addon {
+                position: relative;
+            }
+
+            /* style icon */
+            .inner-addon .glyphicon {
+                position: absolute;
+                padding: 10px;
+                pointer-events: none;
+            }
+
+            /* align icon */
+            .left-addon .glyphicon  { left:  0px;}
+            .right-addon .glyphicon { right: 0px;}
+
+            /* add padding  */
+            .left-addon input  { padding-left:  30px; }
+            .right-addon input { padding-right: 30px; }
+        </style>
+
+        <div class="col-md-3">
+            <div class="panel ">
+                <h3>Blog Search</h3>
+                <form action="{{ path('blog_post_list') }}" method="get">
+
+                    <div class="form-group " style="display: none">
+                        <label class="control-label sr-only">
+                            Search
+                        </label>
+                        <div class="inner-addon left-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            <input type="text" class="form-control" placeholder="Search" />
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback has-feedback-left" >
+                        <label class="control-label sr-only">Search</label>
+                        <i class=" form-control-feedback glyphicon glyphicon-search"></i>
+                        <input type="search" name="s" class="form-control" placeholder="Search for..." />
+                        <input type="submit" style="display: none">
+                    </div>
+
+                    <div class="form-group  " style="display: none">
+                        <label class="control-label sr-only">Search</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                              <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"><i class=" glyphicon glyphicon-search"></i></button>
+                              </span>
+                        </div><!-- /input-group -->
+                    </div>
+
+                    </form>
+                </form>
+
+            </div>
+            <h2>something</h2>
+        </div>
+
+    </div>
+
+{% endblock %}
+

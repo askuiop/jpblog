@@ -1,0 +1,10 @@
+{% extends "@Blog/layout.html.twig" %}
+
+{% block container %}
+    <h2>{{ blog.title }}</h2>
+    <p><span>{{ blog.user.nickname }}</span> @ <span>{{ blog.createdAt | date("Y-m-d H:i:s")  }}</span></p>
+    <div>
+        {{ blog.content | raw }}
+    </div>
+{% endblock %}
+

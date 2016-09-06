@@ -1,5 +1,9 @@
-jims_addon:
-    resource: "@JimsAddonBundle/Resources/config/routing.yml"
+jims_msg_queue:
+    resource: "@JimsMsgQueueBundle/Resources/config/routing.yml"
+    prefix:   /
+
+jims_editor_hub:
+    resource: "@JimsEditorHubBundle/Resources/config/routing.yml"
     prefix:   /
 
 blog:

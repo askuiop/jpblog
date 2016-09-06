@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use BlogBundle\Entity\Post;
 use BlogBundle\Form\PostType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Post controller.
@@ -20,6 +21,13 @@ class PostController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get("security.authorization_checker")->isGranted("ROLE_USER")) {
+            #die('xxx');
+            //throw new \Exception("out");
+            throw $this->createAccessDeniedException('out!');
+            throw new AccessDeniedException("get out!");
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $posts = $em->getRepository('BlogBundle:Post')->findAll();
@@ -35,22 +43,26 @@ class PostController extends Controller
      */
     public function newAction(Request $request)
     {
+        $this->denyAccessUnlessGranted("ROLE_USER");
+
         $post = new Post();
         $form = $this->createForm('BlogBundle\Form\PostType', $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $post->setUser($user);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
 
-            return $this->redirectToRoute('post_show', array('id' => $post->getId()));
+            return $this->redirectToRoute('admin_post_show', array('id' => $post->getId()));
         }
 
         return $this->render('post/new.html.twig', array(
             'post' => $post,
             'form' => $form->createView(),
-            'value' => "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
         ));
     }
 
@@ -74,6 +86,8 @@ class PostController extends Controller
      */
     public function editAction(Request $request, Post $post)
     {
+        $this->denyAccessUnlessGranted('POST_EDIT', $post);
+        
         $deleteForm = $this->createDeleteForm($post);
         $editForm = $this->createForm('BlogBundle\Form\PostType', $post);
         $editForm->handleRequest($request);
@@ -121,7 +135,7 @@ class PostController extends Controller
     private function createDeleteForm(Post $post)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('post_delete', array('id' => $post->getId())))
+            ->setAction($this->generateUrl('admin_post_delete', array('id' => $post->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

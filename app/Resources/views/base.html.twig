@@ -5,9 +5,14 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <script type="text/javascript" src="{{ asset('bundles/jimseditorhub/umeditor/third-party/jquery.min.js') }}"></script>
     </head>
     <body>
-        {% block body %}{% endblock %}
+    {% block header %}
+
+    {% endblock %}
+
+    {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

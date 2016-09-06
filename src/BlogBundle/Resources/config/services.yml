@@ -2,3 +2,31 @@ services:
 #    blog.example:
 #        class: BlogBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+
+    blog.security.from.login:
+        class: BlogBundle\Security\LoginFormAuthentictor
+        autowire: true
+
+    blog.doctrine.hash_password_subscriber:
+        class: BlogBundle\Doctrine\HashPasswordListener
+        autowire: true
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    blog.last_router_listener:
+        class: BlogBundle\Listener\LastRouteListener
+        autowire: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 30 }
+
+    blog.post_voter:
+        class: BlogBundle\Security\BlogVoter
+        arguments: ['@service_container',  '@security.access.decision_manager', '@security.role_hierarchy']
+        tags:
+            - { name: security.voter }
+
+    bolg.asset_version_twig_extension:
+        class: BlogBundle\Twig\AssetVersionExtension
+        arguments: [ "%kernel.root_dir%" ]
+        tags:
+            - { name: twig.extension }

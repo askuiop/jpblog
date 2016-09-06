@@ -1,0 +1,4 @@
+services:
+    jims_msg_queue.Daemon:
+        class: Jims\MsgQueueBundle\Service\Daemon
+        #arguments: ["@service_id", "plain_value", %parameter%]

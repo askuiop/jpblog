@@ -10,13 +10,18 @@ namespace BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"account"}, message="Unique!")
  */
-class User
+class User implements UserInterface
 {
 	/**
 	 * @ORM\Id
@@ -24,8 +29,10 @@ class User
 	 * @ORM\Column(type="integer")
 	 */
 	private $id;
+
 	/**
 	 * @ORM\Column(type="string")
+	 * @Assert\NotBlank()
 	 */
 	private $account;
 	/**
@@ -47,7 +54,7 @@ class User
 	 */
 	private $createdAt;
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="datetime")
 	 */
 	private $updatedAt;
 
@@ -57,6 +64,9 @@ class User
 	private $posts;
 
 
+	/**
+	 * @Assert\NotBlank(groups={"Registration"})
+	 */
 	private $plainPassword;
 
 	/**
@@ -122,6 +132,9 @@ class User
 	 */
 	public function getNickname()
 	{
+		if ($this->nickname==null) {
+		    return $this->getUsername();
+		}
 		return $this->nickname;
 	}
 
@@ -177,6 +190,7 @@ class User
 	 * Set createdAt
 	 *
 	 * @param \DateTime $createdAt
+	 *
 	 *
 	 * @return User
 	 */
@@ -270,5 +284,56 @@ class User
 	public function setPlainPassword($plainPassword)
 	{
 		$this->plainPassword = $plainPassword;
+		$this->password = null;
 	}
+
+	public function getRoles()
+	{
+		return ["ROLE_USER"];
+	}
+
+	public function getSalt()
+	{
+		// TODO: Implement getSalt() method.
+	}
+
+	public function getUsername()
+	{
+		return $this->account;
+	}
+
+	public function eraseCredentials()
+	{
+		$this->plainPassword = null;
+	}
+
+
+
+
+	/**
+	 * @ORM\PrePersist()
+	 */
+	public function prePersist()
+	{
+		if (empty($this->createdAt)) {
+			$this->setCreatedAt(new \DateTime());
+		}
+
+		if (empty($this->updatedAt)) {
+			$this->setUpdatedAt(new \DateTime());
+		}
+
+
+	}
+
+	/**
+	 * @ORM\PreUpdate()
+	 */
+	public function preUpdate()
+	{
+		$this->setUpdatedAt(new \DateTime());
+	}
+
+
+
 }

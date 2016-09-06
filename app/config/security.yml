@@ -7,8 +7,14 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        blog_user:
+            entity: { class: BlogBundle\Entity\User }
         in_memory:
             memory: ~
+
+    role_hierarchy:
+        ROLE_USER: ['ROLE_VISTOR']
+        ROLE_ADMIN: ['ROLE_ALLOWED_TO_SWITCH']
 
 
     firewalls:
@@ -19,6 +25,15 @@ security:
 
         main:
             anonymous: ~
+            guard:
+                authenticators:
+                    - blog.security.from.login
+            provider: blog_user
+
+            logout:
+                path: blog_security_logout
+                target: blog_security_login
+
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -26,3 +41,6 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+        #- { path: ^/post, role: ROLE_USER }

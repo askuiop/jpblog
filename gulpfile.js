@@ -56,15 +56,75 @@ var app = {
 }
 
 gulp.task('styles', function () {
-    app.addScript([], 'nth.css')
+    //app.addStyle([
+    //    config.bowerDir + 'bootstrap/dist/css/bootstrap.css',
+    //    config.assetsDir + 'sass/main.scss',
+    //], 'main.css')
+//
+    //app.addStyle([
+    //    config.assetsDir + 'sass/home.scss',
+    //], 'home.css')
+
+
+    var pipeline = new Pipeline();
+
+    pipeline.add(
+        [
+            config.bowerDir + 'bootstrap/dist/css/bootstrap.css',
+            config.assetsDir + 'sass/main.scss',
+        ], 'main.css'
+    )
+
+    pipeline.add(
+        [
+            config.assetsDir + 'sass/home.scss',
+        ], 'home.css'
+    )
+
+    pipeline.add(
+        [
+            config.assetsDir + 'sass/post.scss',
+        ], 'post.css'
+    )
+
+    return pipeline.run(app.addStyle);
+
 })
 
-gulp.task('script',function () {
+gulp.task('scripts',function () {
     app.addScript([
         config.bowerDir + 'jquery/dist/jquery.js'
-    ], 'c.js')
+    ], 'jquery.js')
 })
 
+gulp.task('clean', function () {
+    del.sync(config.revManifestFile);
+    del.sync("web/dist/*");
+})
+
+gulp.task('fonts', function () {
+    var pipeline = new Pipeline();
+    pipeline.add(
+        [ config.bowerDir+'bootstrap/dist/fonts/*' ],
+        'web/dist/fonts'
+    )
+    return pipeline.run(app.addCopy);
+    //return app.addCopy(
+    //    [ config.bowerDir+'font-awesome/fonts/*' ],
+    //    'web/dist/fonts'
+    //).on('end', function () {
+    //    console.log('start fonts');
+    //})
+})
+
+gulp.task('watch', function () {
+    console.log('start watch');
+    gulp.watch( config.assetsDir + config.sassPattern, ['styles'])
+    gulp.watch( config.assetsDir + config.jsPattern, ['scripts'])
+})
+
+
+gulp.task('sequence', plugins.sequence('clean', ['styles', 'scripts', 'fonts'], 'watch'));//顺序执行：'clean', run 'styles', 'scripts','fonts' in parallel after 'clean';
 
 /*
 gulp.task('styles', function() {

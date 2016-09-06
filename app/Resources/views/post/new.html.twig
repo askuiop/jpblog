@@ -1,6 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {#<video width="640" height="480" autoplay></video>#}
+
+    <script>
+        /*
+        var video = document.querySelector('video');
+
+        navigator.webkitGetUserMedia({
+            video: true
+        }, success, error);
+
+        function success(stream) {
+            video.src = window.webkitURL.createObjectURL(stream);
+            video.play();
+        }
+
+        function error(err) {
+            alert('video error: ' + err)
+        }*/
+    </script>
     <h1>Post creation</h1>
 
     {{ form_start(form) }}
@@ -11,7 +30,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('post_index') }}">Back to the list</a>
+            <a href="{{ path('admin_post_index') }}">Back to the list</a>
         </li>
     </ul>
 {% endblock %}

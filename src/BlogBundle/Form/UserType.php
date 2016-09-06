@@ -21,8 +21,8 @@ class UserType extends AbstractType
             ->add('nickname')
             ->add('mail')
             ->add('plain_password', PasswordType::class)
-            #->add('createdAt', DateTimeType::class)
-            #->add('updatedAt', DateTimeType::class)
+            ->add('createdAt', DateTimeType::class)
+            ->add('updatedAt', DateTimeType::class)
         ;
     }
     
