@@ -8,66 +8,93 @@
 
 namespace BlogBundle\Entity;
 
+
+use BlogBundle\Doctrine\CreateAndUpdateAction;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="UserRepository")
  * @ORM\Table(name="user")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"user" = "User", "oauth" = "Oauth"})
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(fields={"account"}, message="Unique!")
  */
-class User implements UserInterface
+class User extends Base  implements AdvancedUserInterface
 {
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 * @ORM\Column(type="integer")
 	 */
-	private $id;
+	protected $id;
 
 	/**
 	 * @ORM\Column(type="string")
 	 * @Assert\NotBlank()
 	 */
-	private $account;
+	protected $account;
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $nickname;
+	protected $nickname;
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $mail;
+	protected $email;
 
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $password;
+	protected $password;
+
+
+  /**
+   * @ORM\Column(type="string")
+   */
+  protected $avatar = '';
+
+  /**
+   * @ORM\Column(type="boolean", nullable=true)
+   */
+  protected $gender;
+
+  /**
+   * @ORM\Column(type="string")
+   */
+  protected $phoneNumber = '';
+
+  /**
+   * @ORM\Column(type="string")
+   */
+  protected $addr = '';
 
 	/**
 	 * @ORM\Column(type="datetime")
 	 */
-	private $createdAt;
+	protected $createdAt;
 	/**
 	 * @ORM\Column(type="datetime")
 	 */
-	private $updatedAt;
+	protected $updatedAt;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="BlogBundle\Entity\Post", mappedBy="user")
 	 */
-	private $posts;
+	protected $posts;
 
 
 	/**
 	 * @Assert\NotBlank(groups={"Registration"})
 	 */
-	private $plainPassword;
+	protected $plainPassword;
 
 	/**
 	 * Constructor
@@ -132,34 +159,31 @@ class User implements UserInterface
 	 */
 	public function getNickname()
 	{
-		if ($this->nickname==null) {
-		    return $this->getUsername();
-		}
 		return $this->nickname;
 	}
 
 	/**
-	 * Set mail
+	 * Set email
 	 *
-	 * @param string $mail
+	 * @param string $email
 	 *
 	 * @return User
 	 */
-	public function setMail($mail)
+	public function setEmail($email)
 	{
-		$this->mail = $mail;
+		$this->email = $email;
 
 		return $this;
 	}
 
 	/**
-	 * Get mail
+	 * Get email
 	 *
 	 * @return string
 	 */
-	public function getMail()
+	public function getEmail()
 	{
-		return $this->mail;
+		return $this->email;
 	}
 
 	/**
@@ -307,32 +331,94 @@ class User implements UserInterface
 		$this->plainPassword = null;
 	}
 
+  public function isAccountNonExpired()
+  {
+    return true;
+  }
+
+  public function isAccountNonLocked()
+  {
+    return true;
+  }
+
+  public function isCredentialsNonExpired()
+  {
+    return true;
+  }
+
+  public function isEnabled()
+  {
+    return true;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAvatar()
+  {
+    return $this->avatar;
+  }
+
+  /**
+   * @param mixed $avatar
+   */
+  public function setAvatar($avatar)
+  {
+    $this->avatar = $avatar;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGender()
+  {
+    return $this->gender;
+  }
+
+  /**
+   * @param mixed $gender
+   */
+  public function setGender($gender)
+  {
+    $this->gender = $gender;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPhoneNumber()
+  {
+    return $this->phoneNumber;
+  }
+
+  /**
+   * @param mixed $phoneNumber
+   */
+  public function setPhoneNumber($phoneNumber)
+  {
+    $this->phoneNumber = $phoneNumber;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAddr()
+  {
+    return $this->addr;
+  }
+
+  /**
+   * @param mixed $addr
+   */
+  public function setAddr($addr)
+  {
+    $this->addr = $addr;
+  }
 
 
-
-	/**
-	 * @ORM\PrePersist()
-	 */
-	public function prePersist()
-	{
-		if (empty($this->createdAt)) {
-			$this->setCreatedAt(new \DateTime());
-		}
-
-		if (empty($this->updatedAt)) {
-			$this->setUpdatedAt(new \DateTime());
-		}
+  //use CreateAndUpdateAction;
 
 
-	}
-
-	/**
-	 * @ORM\PreUpdate()
-	 */
-	public function preUpdate()
-	{
-		$this->setUpdatedAt(new \DateTime());
-	}
 
 
 

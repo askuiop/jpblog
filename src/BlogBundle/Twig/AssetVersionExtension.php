@@ -45,9 +45,20 @@ class AssetVersionExtension extends \Twig_Extension
         return '/'.trim($paths[$filename], '/');
     }
 
-    public function getPostShortcut($content)
+    public function getPostShortcut($content, $length=100)
     {
-        return '123444';
+        $length = (int)$length;
+        if (!$content || !$length) {
+            return $content;
+
+        }
+
+        preg_match('/.{' . $length . '}/u', $content, $mth);
+        if(empty($mth[0])){
+            return $content;
+        } else {
+            return $mth[0];
+        }
     }
 
 

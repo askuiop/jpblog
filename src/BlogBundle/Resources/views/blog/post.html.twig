@@ -7,6 +7,7 @@
 
 
 {% block container %}
+
     <div class="row">
         <div class="col-md-9">
             <h2>Post</h2>
@@ -16,16 +17,34 @@
             {% endif %}
 
 
-            {% if blog_list %}
+            {% if pagination %}
                 <div >
-                    {% for blog in blog_list if blog %}
+                    {% for blog in pagination if blog %}
                         <div class="post-list">
-                            <p><a href="{{ path('blog_post_detail', { 'id': blog.id }) }}">{{ blog.title }}</a></p>
-                            <p>{{ blog.content | post_shortcut }}</p>
-                            <p><span>{{ blog.user.nickname }}</span> @ <span>{{ blog.createdAt | date("Y-m-d H:i:s")  }}</span></p>
+                            <h4 class="post-title"><a href="{{ path('blog_post_detail', { 'id': blog.id }) }}">{{ blog.title }}</a></h4>
+                            <div class="post-preview">
+                                {% if blog.thumbnail %}
+                                    <p class="post-thumb"> <a href="{{ path('blog_post_detail', { 'id': blog.id }) }}" ><img src="{{ blog.thumbnail | imagine_filter('my_thumb') }}" alt="" height="90px" width="120px"></a></p>
+                                {% endif %}
+
+                                <p class="post-summary">{{ blog.summary | post_shortcut }}</p>
+                                <p><span>{{ blog.user.nickname }}</span> @ <span>{{ blog.createdAt | date("Y-m-d H:i:s")  }}</span></p>
+                            </div>
+
                         </div>
                     {% endfor %}
                 </div>
+
+
+                <nav>
+                    <span class="count">
+                        {{ pagination.getTotalItemCount }}
+                    </span>
+                    {{ knp_pagination_render(pagination) }}
+
+                </nav>
+
+
             {% endif %}
         </div>
 

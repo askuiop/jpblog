@@ -19,6 +19,10 @@ class AppKernel extends Kernel
             new BlogBundle\BlogBundle(),
             new Jims\EditorHubBundle\JimsEditorHubBundle(),
             new Jims\MsgQueueBundle\JimsMsgQueueBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
+            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
+            new Innocead\CaptchaBundle\InnoceadCaptchaBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
@@ -26,6 +30,9 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+
+            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
+            $bundles[] = new Hautelook\AliceBundle\HautelookAliceBundle();
         }
 
         return $bundles;

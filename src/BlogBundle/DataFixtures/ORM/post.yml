@@ -1,0 +1,7 @@
+BlogBundle\Entity\Post:
+    post{1..10}:
+        title: <sentence()>
+        content: <text()>
+        summary: <sentence()>
+        thumbnail: <getExamplePic()>
+        user: '@user<numberBetween(1,5)>'

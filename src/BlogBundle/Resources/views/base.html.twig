@@ -9,6 +9,11 @@
         <link rel="stylesheet" href="{{ asset('/dist/css/main.css') | asset_version }}">
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% block js_source %}
+        <script src="{{ asset("dist/js/jquery.js") | asset_version  }}"></script>
+    {% endblock %}
+
 </head>
 <body>
 {% block body %}{% endblock %}

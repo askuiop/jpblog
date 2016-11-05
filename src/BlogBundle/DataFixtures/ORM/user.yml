@@ -1,0 +1,6 @@
+BlogBundle\Entity\User:
+    user{1..5}:
+      account: <getNameOfRand()>
+      nickname: <getNameOfRand()>
+      #email: <email()>
+      plainPassword: 123456

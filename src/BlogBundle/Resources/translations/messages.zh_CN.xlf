@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="101">
+                <source>homePage.title</source>
+                <target>我的博客</target>
+            </trans-unit>
+            <trans-unit id="102">
+                <source>homePage.description</source>
+                <target>Jims BLOG</target>
+            </trans-unit>
+            <trans-unit id="103">
+                <source>homePage.keywords</source>
+                <target>Jims BLOG</target>
+            </trans-unit>
+
+            <trans-unit id="201">
+                <source>blog.name</source>
+                <target>我的博客</target>
+            </trans-unit>
+            <trans-unit id="202">
+                <source>menu.index</source>
+                <target>主页</target>
+            </trans-unit>
+            <trans-unit id="203">
+                <source>menu.post</source>
+                <target>文章</target>
+            </trans-unit>
+            <trans-unit id="204">
+                <source>menu.about</source>
+                <target>关于</target>
+            </trans-unit>
+            <trans-unit id="205">
+                <source>menu.contact</source>
+                <target>联系</target>
+            </trans-unit>
+
+            <trans-unit id="206">
+                <source>security.login</source>
+                <target>登录</target>
+            </trans-unit>
+            <trans-unit id="207">
+                <source>security.logout</source>
+                <target>退出</target>
+            </trans-unit>
+            <trans-unit id="208">
+                <source>security.register</source>
+                <target>注册</target>
+            </trans-unit>
+
+            <trans-unit id="301">
+                <source>language.en</source>
+                <target>英文</target>
+            </trans-unit>
+            <trans-unit id="302">
+                <source>language.cn</source>
+                <target>中文</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

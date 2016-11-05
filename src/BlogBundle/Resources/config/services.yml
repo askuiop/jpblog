@@ -1,10 +1,33 @@
+parameters:
+    post_upload_directory: "%kernel.root_dir%/../web/uploads/post"
+
+    #session_memcache:
+    session_memcache_host:     127.0.0.1
+    session_memcache_port:     11211
+    session_memcache_prefix:   sess_blog:
+    session_memcache_expire:   3600
+
 services:
 #    blog.example:
 #        class: BlogBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
 
+
+    #session_memcache:
+    session_memcache:
+        class: Memcache
+        arguments: []
+        calls:
+            - [ addServer, [ '%session_memcache_host%' , '%session_memcache_port%' ] ]
+    blog.session.handler.memcache:
+         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
+         arguments: [ '@session_memcache', { expiretime: '%session_memcache_expire%', prefix: '%session_memcache_prefix%' } ]
+
+
+
+
     blog.security.from.login:
-        class: BlogBundle\Security\LoginFormAuthentictor
+        class: BlogBundle\Security\LoginFormAuthenticator
         autowire: true
 
     blog.doctrine.hash_password_subscriber:
@@ -30,3 +53,30 @@ services:
         arguments: [ "%kernel.root_dir%" ]
         tags:
             - { name: twig.extension }
+
+    blog.comment_cascade_twig_extension:
+        class: BlogBundle\Twig\Extension\commentsCascade
+        tags:
+            - { name: twig.extension }
+
+    blog.post_new_form:
+        class: BlogBundle\Form\PostType
+        arguments: [ "%post_upload_directory%" ]
+        tags:
+            - { name: form.type }
+
+    #blog.login_listener:
+    #    class: BlogBundle\Listener\InteractiveLoginListener
+    #    tags:
+    #        - { name: kernel.event_listener , event: security.interactive_login, method: onInteractiveLogin, priority: 30  }
+
+    #monolog.logger.jims_auth2:
+    #    class: Monolog\Handler\StreamHandler
+    #    arguments: ["%kernel.logs_dir%/%kernel.environment%/authentication.log", 200]
+#
+    blog.authentication_subcriber:
+        class: BlogBundle\Listener\AuthenticationSubcriber
+        arguments: [ '@monolog.logger.jims_auth' ]
+        tags:
+            - { name: kernel.event_subscriber }
+            - { name: monolog.logger, channel: jims_auth }

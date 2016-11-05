@@ -8,17 +8,17 @@
                 <header class="">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-3">
-                            <h1>Jims blog</h1>
+                            <h1>{{ "blog.name" | trans }}</h1>
                         </div>
 
 
                         {% block nav %}
                             <div class="col-xs-12 col-sm-12 col-md-7 menu-list">
                                 <ul class="nav nav-pills">
-                                    <li><a href="{{ path('blog_homepage') }}">Index</a></li>
-                                    <li><a href="{{ path('blog_post_list') }}">Post</a></li>
-                                    <li><a href="{{ path('blog_homepage') }}">About</a></li>
-                                    <li><a href="{{ path('blog_contact') }}">Contact</a></li>
+                                    <li><a href="{{ path('blog_homepage') }}">{{ "menu.index" | trans }}</a></li>
+                                    <li><a href="{{ path('blog_post_list') }}">{{ "menu.post" | trans }}</a></li>
+                                    <li><a href="{{ path('blog_homepage') }}">{{ "menu.about" | trans }}</a></li>
+                                    <li><a href="{{ path('blog_contact') }}">{{ "menu.contact" | trans }}</a></li>
                                 </ul>
                             </div>
                         {% endblock %}
@@ -26,10 +26,11 @@
                         <div class="col-xs-12 col-sm-12 col-md-2 security-entry">
                             <ul class="nav nav-pills ">
                                 {% if app.user and is_granted("ROLE_USER") %}
-                                    <li><a class="" href="{{ path('blog_security_logout') }}">logout</a></li>
+                                    <li><a href="##"><i class="glyphicon glyphicon-user"> </i>{{ app.user.username }}</a></li>
+                                    <li><a class="" href="{{ path('blog_security_logout') }}">{{ "security.logout" | trans }}</a></li>
                                 {% else %}
-                                    <li><a class="" href="{{ path('blog_security_login') }}">Login</a></li>
-                                    <li><a class="" href="{{ path('blog_security_register') }}">Register</a></li>
+                                    <li><a class="" href="{{ path('blog_security_login') }}">{{ "security.login" | trans }}</a></li>
+                                    <li><a class="" href="{{ path('blog_security_register') }}">{{ "security.register" | trans }}</a></li>
                                 {% endif %}
                             </ul>
                         </div>

@@ -1,10 +1,132 @@
 {% extends "@Blog/layout.html.twig" %}
 
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
 {% block container %}
     <h2>{{ blog.title }}</h2>
     <p><span>{{ blog.user.nickname }}</span> @ <span>{{ blog.createdAt | date("Y-m-d H:i:s")  }}</span></p>
     <div>
         {{ blog.content | raw }}
     </div>
+
+    <style>
+        .div-comments h4{
+            color: #128ee9;
+            font-weight: 500;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+        }
+        .div-comments .content p{
+            font-weight: 500;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+            line-height: 16px;
+            margin-bottom: 6px;
+        }
+        .div-comments .avatar{
+            float: left;
+
+        }
+        .div-comments .content{
+            margin-left: 70px;
+        }
+        .div-comments .avatar img{
+            width: 60px;
+            height: 60px;
+        }
+        .div-comments .child{
+            padding-left: 60px;
+        }
+
+        .div-comments .child img{
+            width: 48px;
+            height: 48px;
+        }
+        .div-comments .child .content{
+            margin-left: 58px;
+        }
+    </style>
+
+    <div class="col-md-6">
+        <h3>Comments:</h3>
+        {% if blog.comments | length>0   %}
+            {% set tpl  %}
+                <div class="div-comments">
+                    <div class="avatar"><img src="/default/user.jpg" alt=""></div>
+                    <div class="content">
+                        <h4>%nickname% %date%</h4>
+                        <p>%title%</p>
+                        <p>%content%</p>
+                        <p><button class="btn btn-default btn-xs btn-reply" data-comment-id="%id%" data-comment-auth="%nickname%">reply</button></p>
+                    </div>
+                    <div class="child"><child /></div>
+
+                </div>
+            {% endset %}
+
+            {{ blog.comments | cascadeComment(tpl) | raw }}
+
+{#            {% for comment in blog.comments if comment.depth==0 %}
+                <div>
+                    <h4>{{ comment.nickname }} - {{ comment.createdAt | date('Y-m-d h:i:s') }}</h4>
+                    <p>{{ comment.title }}</p>
+                    <p>{{ comment.content }}</p>
+                    <p><button class="btn btn-default btn-xs btn-reply" data-comment-id="{{ comment.id }}" data-comment-auth="{{ comment.nickname }}">reply</button></p>
+                </div>
+            {% endfor %}#}
+        {% else %}
+            <div>
+                <p>Here is nothing.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+
+    <div class="col-md-4">
+        <h3>Leave a message to me :)</h3>
+
+        {% for flash_message in app.session.flashBag.get('notice') %}
+            <div class="alert alert-success" role="alert">
+                <a href="##" class="alert-link">{{ flash_message }}</a>
+            </div>
+        {% endfor %}
+
+
+        {{ form_start(form) }}
+        <div class="div-reply">
+            <div style="line-height: 28px;
+    border: 1px #b5b5b5 solid;
+    display: block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+">
+                <b style="float: right; font-size: 24px" class="text text-danger">&times;</b>
+                <span class="text text-danger" style="    "></span>
+            </div>
+
+            <input type="hidden" name="reply-to">
+        </div>
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+        $(function () {
+            $('.btn-reply').click(function () {
+                var btn = $(this);
+                var id = btn.attr('data-comment-id');
+                var auth = btn.attr('data-comment-auth');
+                $('.div-reply span').html("@ "+auth);
+                $('#comment_reply_to').val(id);
+                $('#comment_nickname').focus();
+
+            })
+        });
+    </script>
+
 {% endblock %}
 

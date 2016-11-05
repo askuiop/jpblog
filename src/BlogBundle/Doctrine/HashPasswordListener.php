@@ -32,12 +32,13 @@ class HashPasswordListener implements EventSubscriber
 		  return ;
 		}
 
+
 		if ($entity->getNickname() === null) {
 		    $entity->setNickname('');
 		}
 
-		if ($entity->getMail() === null) {
-			$entity->setMail('');
+		if ($entity->getEmail() === null) {
+			$entity->setEmail('');
 		}
 
 

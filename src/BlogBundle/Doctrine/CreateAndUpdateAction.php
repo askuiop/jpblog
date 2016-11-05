@@ -7,9 +7,9 @@
  */
 
 namespace BlogBundle\Doctrine;
+use Doctrine\ORM\Mapping as ORM;
 
-
-trait CreatAndUpdateAction
+trait CreateAndUpdateAction
 {
 	/**
 	 * @ORM\PrePersist()

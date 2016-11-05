@@ -2,6 +2,7 @@
 
 namespace BlogBundle\Entity;
 
+
 /**
  * PostRepository
  *
@@ -19,4 +20,6 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 			->getQuery();
 		return $query->getResult();
 	}
+
+
 }

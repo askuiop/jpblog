@@ -12,12 +12,14 @@ web_profiler:
     intercept_redirects: false
 
 monolog:
+    #Configure Additional Channels without Tagged Services
+    #channels: ['jims_auth']
     handlers:
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-            channels: [!event]
+            channels: [!event, !jims_auth]
         console:
             type:   console
             channels: [!event, !doctrine]
@@ -29,6 +31,11 @@ monolog:
         #chromephp:
         #    type:   chromephp
         #    level:  info
+
+        jims_auth:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%/authentication.log"
+            channels: [ jims_auth ]
 
 #swiftmailer:
 #    delivery_address: me@example.com

@@ -1,5 +1,27 @@
 
 .post-list{
-  margin: 10px 0 10px 0;
+  margin: 20px 0 10px 0;
   border-bottom: 1px solid #ccc;
+
+  .post-title{
+
+  }
+
+  .post-preview{
+    height: 120px;
+
+    .post-thumb{
+      float:left;
+      margin-right: 10px;
+
+      img{
+        border: 1px solid #ccc;
+        padding: 2px;
+      }
+    }
+    .post-summary{
+      height: 60px;
+      overflow: hidden;
+    }
+  }
 }

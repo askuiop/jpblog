@@ -51,7 +51,21 @@ class DaemonLog
 	 */
 	const LOG_DEBUG = 7;
 
-	
+	/**
+	 * Available log levels
+	 *
+	 * @var array
+	 */
+	static protected $_logLevels = array(
+		self::LOG_EMERG   => 'emerg',
+		self::LOG_ALERT   => 'alert',
+		self::LOG_CRIT    => 'crit',
+		self::LOG_ERR     => 'err',
+		self::LOG_WARNING => 'warning',
+		self::LOG_NOTICE  => 'notice',
+		self::LOG_INFO    => 'info',
+		self::LOG_DEBUG   => 'debug',
+	);
 	
 	/**
 	 * Logging shortcut

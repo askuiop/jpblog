@@ -1,0 +1,14 @@
+{% extends '@Blog/layout.html.twig' %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block container %}
+    <div class="row">
+        <h2>New Post</h2>
+
+
+    </div>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

@@ -9,6 +9,7 @@ security:
     providers:
         blog_user:
             entity: { class: BlogBundle\Entity\User }
+
         in_memory:
             memory: ~
 
@@ -33,6 +34,11 @@ security:
             logout:
                 path: blog_security_logout
                 target: blog_security_login
+
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 
             # activate different ways to authenticate
 
