@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="{{ asset("dist/js/jquery-888d4551b8.js") }}"></script>
+</head>
+<body>
+<h1 class="counter"></h1>
+</body>
+</html>
+
+<script type="text/x-template" id="counter-template">
+    <span><i>${ days }$天</i><i>${ hours }$小时</i></span>
+    <span><i>${ hours }$天</i>:<i>${ minutes }$小时</i>:<i>${ seconds }$</i></span>
+</script>
+
+<script>
+    var GWCounter = function (elem, options, render) {
+        this.elem = elem;
+        this.options = {
+            format: {
+                days: "dd",
+                hours: "hh",
+                minutes: "mm",
+                seconds: "ss",
+            },
+            currentTime: new Date(),
+            endTime: function () {},
+            endCallBack: function () {},
+            updateInterval: 1000,
+            render: null
+        };
+        this.data = null;
+        this.template=[
+            '<span><i>${ days }$天</i><i>${ hours }$小时</i></span>',
+            '<span><i>${ hours }$</i>:<i>${ minutes }$</i>:<i>${ seconds }$</i></span>'
+        ];
+        if (typeof options != "undefined") {
+            for (var s in this.options) {
+                if (typeof options[s] != "undefined") {
+                    this.options[s] = options[s];
+                }
+            }
+        }
+
+        if (typeof render == "function") {
+            GWCounter.prototype.render = render;
+        } else {
+            GWCounter.prototype.render = function () {
+                if (!this.data) return false;
+                if (parseInt(this.data.days) >= 1) {
+                    clearInterval(this.timer);
+                    this.elem.innerHTML = this.parseHtml(this.template[0]);
+                } else {
+                    this.elem.innerHTML = this.parseHtml(this.template[1]);
+                }
+            }
+        }
+        this.parseHtml = function (template, data) {
+            if(data == "undefined" || !data){
+                data = this.data;
+            }
+            var html = template;
+            html = html.replace(/\${ days }\$/g,    data.days);
+            html = html.replace(/\${ hours }\$/g,   data.hours);
+            html = html.replace(/\${ minutes }\$/g, data.minutes);
+            html = html.replace(/\${ seconds }\$/g, data.seconds);
+            return html;
+        },
+        this.compute = function () {
+            var leftsecond = parseInt((this.options.endTime.getTime() - this.options.currentTime.getTime()) / 1000);
+            if (leftsecond < 0) {
+                clearInterval(this.timer);
+                this.options.endCallBack();
+                return false;
+            }
+            return {
+                days: parseInt(leftsecond / 3600 / 24),
+                hours: parseInt((leftsecond / 3600) % 24),
+                minutes: parseInt((leftsecond / 60) % 60),
+                seconds: parseInt(leftsecond % 60),
+            }
+        }
+        this.format = function (data) {
+            for (var item in data) {
+                data[item] = data[item].toString().length < this.options.format[item].length
+                        ? '0' + data[item]
+                        : '' + data[item];
+            }
+            return data;
+        }
+        this.update = function () {
+            this.options.currentTime.setSeconds(this.options.currentTime.getSeconds() + 1);
+            this.data = this.format(this.compute());
+
+            //this.render(this.compute());
+            this.render();
+        }
+        var _update = this.update;
+        this.timer = setInterval(this.update.bind(this), this.options.updateInterval);
+    }
+
+
+    $(function () {
+        var $render = function () {
+            //if (!data) return false;
+            data = this.compute();
+            data = this.formate(data);
+            if (parseInt(data.days) >= 1) {
+                clearInterval(this.timer);
+                this.elem.innerHTML = '<em>' + data.days + '天</em><em>' + data.hours + '小时</em>';
+            } else {
+                this.elem.innerHTML = '<i class="gw_tag_box_3">' + data.hours + '</i>-<i class="gw_tag_box_3">' + data.minutes + '</i>-<i class="gw_tag_box_3">' + data.seconds + '</i>';
+            }
+        }
+        var elem = $(".counter");
+        if (elem.length) {
+            end = "2017/12/13 18:42:12";
+            end = Date.parse(end.replace(/-/g, "/"));
+            var endTime = new Date(end);
+            var nowTime = new Date();
+            new GWCounter(elem[0], {
+                currentTime: nowTime, endTime: endTime, endCallBack: function () {
+                    window.location.reload();
+                }
+            });
+        }
+
+    });
+
+</script>

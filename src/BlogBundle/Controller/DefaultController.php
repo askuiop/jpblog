@@ -256,4 +256,9 @@ class DefaultController extends Controller
         );
         return new JsonResponse($data);
     }
+
+  public function counterAction()
+  {
+    return $this->render('BlogBundle:Default:countdown.html.twig');
+    }
 }

@@ -7,6 +7,21 @@ parameters:
     session_memcache_prefix:   sess_blog:
     session_memcache_expire:   3600
 
+
+    captcha.config:
+        as_url: true
+        reload: true
+        humanity: false
+        session_key: ~
+        width:
+        height:
+        length:
+        phrase: ~
+        quality: 80
+
+
+
+
 services:
 #    blog.example:
 #        class: BlogBundle\Example
@@ -80,3 +95,23 @@ services:
         tags:
             - { name: kernel.event_subscriber }
             - { name: monolog.logger, channel: jims_auth }
+
+
+    blog.catcha_validator:
+        class: BlogBundle\Captcha\CaptchaValidator
+
+    blog.captcha_generator:
+        class: BlogBundle\Captcha\Generator
+        arguments: [ '@router' ]
+
+
+    blog.captcha:
+        class: BlogBundle\Form\CaptchaType
+        arguments:
+              - '@session'
+              - '@blog.captcha_generator'
+              - '@translator'
+              - '%gregwar_captcha.config%'
+        tags:
+            - { name: form.type }
+

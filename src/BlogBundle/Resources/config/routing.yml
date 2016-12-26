@@ -48,6 +48,12 @@ blog_contact:
 
 
 
+blog.captcha:
+    path:     /captcha/{options}
+    defaults: { _controller: BlogBundle:Captcha:generate , options: 0}
+
+
+
 
 
 new_try:
@@ -57,3 +63,7 @@ new_try:
 try_data:
     path:    /data
     defaults: { _controller: BlogBundle:Default:data }
+
+countDown:
+    path:   /counter
+    defaults: { _controller: BlogBundle:Default:counter}

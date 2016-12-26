@@ -55,7 +55,7 @@ class CaptchaValidator
    * @param string              $bypassCode
    * @param int                 $humanity
    */
-  public function __construct(TranslatorInterface $translator, SessionInterface $session, $key, $invalidMessage, $bypassCode, $humanity)
+  public function __construct(TranslatorInterface $translator, SessionInterface $session, $key, $invalidMessage, $bypassCode='', $humanity=false)
   {
     $this->translator       = $translator;
     $this->session          = $session;

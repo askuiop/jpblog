@@ -23,6 +23,7 @@ class commentType extends AbstractType
         ])
         //->add('captcha', CaptchaType::class)
         //->add('captcha', 'innocead_captcha')
+          ->add('captcha', \BlogBundle\Form\CaptchaType::class)
         ->add('submit', SubmitType::class)
 
         ;
